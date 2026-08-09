@@ -22,11 +22,11 @@ if (process.env.NODE_ENV === "development") {
 const categoryRoute = require("./routes/categoryRoute");
 app.use("/api/v1/categories", categoryRoute);
 
-// this old in express version 4
-// app.all('*', (req, res, next) => {
-//   const error = new Error(`Can't find ${req.originalUrl} on this server!`);
-//   next(error.message);
-// });
+const subCategoryRoute = require("./routes/subCategoryRoute");
+app.use("/api/v1/subcategories", subCategoryRoute);
+
+const brandRoute = require("./routes/brandRoute");
+app.use("/api/v1/brands", brandRoute);
 
 // this is new in express version 5
 app.all("/*any", (req, res, next) => {

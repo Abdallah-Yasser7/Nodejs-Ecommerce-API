@@ -15,6 +15,8 @@ const {
   deleteCategoryById,
 } = require("../services/categoryServices");
 
+router.use("/:categoryId/subcategories", require("./subCategoryRoute"));
+
 router
   .route("/")
   .get(getAllCategories)
