@@ -18,7 +18,8 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// routes
+app.set('query parser', 'extended');
+// mount routes
 const categoryRoute = require("./routes/categoryRoute");
 app.use("/api/v1/categories", categoryRoute);
 
@@ -27,6 +28,9 @@ app.use("/api/v1/subcategories", subCategoryRoute);
 
 const brandRoute = require("./routes/brandRoute");
 app.use("/api/v1/brands", brandRoute);
+
+const productRoute = require("./routes/productRoute");
+app.use("/api/v1/products", productRoute);
 
 // this is new in express version 5
 app.all("/*any", (req, res, next) => {

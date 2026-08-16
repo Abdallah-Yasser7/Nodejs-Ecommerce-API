@@ -12,11 +12,12 @@ const {
   getSubCategoryById,
   updateSubCategoryById,
   deleteSubCategoryById,
+  checkCategoryId
 } = require("../services/subCategryServices");
 
 router
   .route("/")
-  .post(createSubCategoryValidator(), createSubCategory)
+  .post(checkCategoryId, createSubCategoryValidator(), createSubCategory)
   .get(getAllSubCategories);
 router
   .route("/:id")
