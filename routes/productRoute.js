@@ -14,6 +14,8 @@ const {
   getProductById,
   updateProductById,
   deleteProductById,
+  uploadProductsImage,
+  resizeProductImages,
 } = require("../services/productServices");
 
 router.use("/:categoryId/subcategories", require("./subCategoryRoute"));
@@ -21,11 +23,11 @@ router.use("/:categoryId/subcategories", require("./subCategoryRoute"));
 router
   .route("/")
   .get(getAllProducts)
-  .post(createProductValidator(), createProduct);
+  .post(uploadProductsImage, resizeProductImages, createProductValidator(), createProduct);
 router
   .route("/:id")
   .get(getProductValidator(), getProductById)
-  .put(updateProductValidator(), updateProductById)
+  .put(uploadProductsImage, resizeProductImages, updateProductValidator(), updateProductById)
   .delete(deleteProductValidator(), deleteProductById);
 
 module.exports = router;

@@ -16,7 +16,22 @@ const brandSchema = new mongoose.Schema({
   image: String,
 }, { timestamps: true })
 
-// 2- create a model
+// 2- mongoose middleware
+brandSchema.post('init', (doc) => {
+  if (doc.image) {
+    const imageURL = `${process.env.BASE_URL}/brands/${doc.image}`;
+    doc.image = imageURL;
+  }
+});
+
+brandSchema.post('save', (doc) => {
+  if (doc.image) {
+    const imageURL = `${process.env.BASE_URL}/brands/${doc.image}`;
+    doc.image = imageURL;
+  }
+});
+
+// 3- create a model
 const BrandModel = mongoose.model('Brand', brandSchema);
 
 module.exports = BrandModel;

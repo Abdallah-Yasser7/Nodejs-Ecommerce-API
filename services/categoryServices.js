@@ -1,6 +1,22 @@
 const CategoryModel = require("../models/categoryModel");
 const factory = require("./handlersFactory");
+const asyncHandler = require("express-async-handler");
+const sharp = require("sharp");
+const { uploadSingleImage } = require("../middlewares/uploadImageMeddleware");
 
+exports.uploadCategoryImage = uploadSingleImage("image");
+
+exports.resizeCategoryImage = asyncHandler(async (req, res, next) => {
+  const fileName = `category-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpeg`;
+  await sharp(req.file.buffer)
+    .resize(600, 600)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`uploads/categories/${fileName}`);
+
+  req.body.image = fileName;
+  next();
+});
 
 // @desc    Create a category
 // @route   POST /api/v1/categories
