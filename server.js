@@ -34,6 +34,9 @@ app.use("/api/v1/brands", brandRoute);
 const productRoute = require("./routes/productRoute");
 app.use("/api/v1/products", productRoute);
 
+const userRoute = require("./routes/userRoute");
+app.use("/api/v1/users", userRoute);
+
 // this is new in express version 5
 app.all("/*any", (req, res, next) => {
   next(new ApiError(`Can't find ${req.originalUrl} on this server!`, 400));
