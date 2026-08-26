@@ -6,6 +6,7 @@ const sharp = require("sharp");
 const ApiError = require("../utils/apiError");
 const slugify = require("slugify");
 const bcrypt = require("bcryptjs");
+const createToken = require("../utils/createToken");
 
 exports.uploadUserImage = uploadSingleImage("profileImg");
 
@@ -72,6 +73,7 @@ exports.changeUserPassword = asyncHandler(async (req, res, next) => {
     req.params.id,
     {
       password: await bcrypt.hash(req.body.password, 12),
+      passwordChangeAt: Date.now(),
     },
     { new: true },
   );
@@ -91,3 +93,70 @@ exports.changeUserPassword = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1/users/:id
 // @access  Private
 exports.deleteUserById = factory.deleteOne(UserModel);
+
+// @desc    Get logged user data
+// @route   GET /api/v1/users/me
+// @access  Private
+exports.getLoggedUserData = asyncHandler(async (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+});
+
+// @desc    Update logged user password
+// @route   PUT /api/v1/users/update-password
+// @access  Private
+exports.updateLoggedUserPassword = asyncHandler(async (req, res, next) => {
+  const user = await UserModel.findByIdAndUpdate(
+    req.user._id,
+    {
+      password: await bcrypt.hash(req.body.password, 12),
+      passwordChangeAt: Date.now(),
+    },
+    { new: true },
+  );
+
+  const token = createToken(user._id);
+
+  res
+    .status(200)
+    .json({ token, data: user, message: "Password changed successfully" });
+});
+
+// @desc    Update logged user data
+// @route   PUT /api/v1/users/update-me
+// @access  Private
+exports.updateLoggedUserData = asyncHandler(async (req, res, next) => {
+  if (req.body.name) {
+    req.body.slug = slugify(req.body.name);
+  }
+  const user = await UserModel.findByIdAndUpdate(
+    req.user._id,
+    {
+      name: req.body.name,
+      slug: req.body.slug,
+      phone: req.body.phone,
+      profileImg: req.body.profileImg,
+    },
+    { new: true },
+  );
+  const token = createToken(user._id);
+  res
+    .status(200)
+    .json({ token, data: user, message: "User data updated successfully" });
+})
+
+// @desc    Delete logged user data
+// @route   DELETE /api/v1/users/delete-me
+// @access  Private
+exports.deleteLoggedUserData = asyncHandler(async (req, res, next) => {
+  await UserModel.findByIdAndUpdate(req.user._id, { active: false });
+  res.status(204).json({ message: "User deleted successfully" });
+});
+
+// @desc    Active logged user
+// @route   PUT /api/v1/users/active-me
+// @access  Private
+exports.activeUser = asyncHandler(async (req, res, next) => {
+  await UserModel.findByIdAndUpdate(req.user._id, { active: true });
+  res.status(200).json({ message: "User activated successfully" });
+});

@@ -24,12 +24,20 @@ const userSchema = new mongoose.Schema(
       required: [true, "User password is required"],
       trim: true,
     },
+    passwordChangeAt: Date,
+    passwordResetCode: String,
+    passwordResetExpires: Date,
+    passwordResetVerified: Boolean,
     profileImg: String,
     phone: String,
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "admin", "manager"],
       default: "user",
+    },
+    active: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }

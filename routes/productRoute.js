@@ -18,16 +18,37 @@ const {
   resizeProductImages,
 } = require("../services/productServices");
 
+const { protect, allowTo } = require("../services/authServices");
+
 router.use("/:categoryId/subcategories", require("./subCategoryRoute"));
 
 router
   .route("/")
   .get(getAllProducts)
-  .post(uploadProductsImage, resizeProductImages, createProductValidator(), createProduct);
+  .post(
+    protect,
+    allowTo("admin", "manager"),
+    uploadProductsImage,
+    resizeProductImages,
+    createProductValidator(),
+    createProduct,
+  );
 router
   .route("/:id")
   .get(getProductValidator(), getProductById)
-  .put(uploadProductsImage, resizeProductImages, updateProductValidator(), updateProductById)
-  .delete(deleteProductValidator(), deleteProductById);
+  .put(
+    protect,
+    allowTo("admin", "manager"),
+    uploadProductsImage,
+    resizeProductImages,
+    updateProductValidator(),
+    updateProductById,
+  )
+  .delete(
+    protect,
+    allowTo("admin"),
+    deleteProductValidator(),
+    deleteProductById,
+  );
 
 module.exports = router;

@@ -5,7 +5,8 @@ const {
   createUserValidator,
   updateUserValidator,
   deleteUserValidator,
-  changeUserPasswordValidator
+  changeUserPasswordValidator,
+  updateLoggedUserValidator,
 } = require("../utils/validator/userValidator");
 
 const {
@@ -16,18 +17,46 @@ const {
   deleteUserById,
   uploadUserImage,
   resizeUserImage,
-  changeUserPassword
+  changeUserPassword,
+  getLoggedUserData,
+  updateLoggedUserPassword,
+  updateLoggedUserData,
+  deleteLoggedUserData,
+  activeUser,
 } = require("../services/userServices");
+
+const { protect, allowTo } = require("../services/authServices");
 
 router
   .route("/")
-  .get(getAllUsers)
-  .post(uploadUserImage, resizeUserImage, createUserValidator(), createUser);
+  .get(protect, allowTo("admin"), getAllUsers)
+  .post(
+    protect,
+    allowTo("admin"),
+    uploadUserImage,
+    resizeUserImage,
+    createUserValidator(),
+    createUser,
+  );
+
+router.route("/me").get(protect, getLoggedUserData, getUserById);
+router.route("/update-password").put(protect, updateLoggedUserPassword);
+router.route("/update-me").put(protect, updateLoggedUserValidator(), updateLoggedUserData);
+router.route("/delete-me").delete(protect, deleteLoggedUserData);
+router.route("/active").put(allowTo("admin"), activeUser);
+
 router
   .route("/:id")
-  .get(getUserValidator(), getUserById)
-  .put(uploadUserImage, resizeUserImage,updateUserValidator(), updateUserById)
-  .delete(deleteUserValidator(), deleteUserById);
+  .get(protect, allowTo("admin"), getUserValidator(), getUserById)
+  .put(
+    protect,
+    allowTo("admin"),
+    uploadUserImage,
+    resizeUserImage,
+    updateUserValidator(),
+    updateUserById,
+  )
+  .delete(protect, allowTo("admin"), deleteUserValidator(), deleteUserById);
 
 router
   .route("/change-password/:id")

@@ -8,6 +8,7 @@ exports.uploadCategoryImage = uploadSingleImage("image");
 
 exports.resizeCategoryImage = asyncHandler(async (req, res, next) => {
   const fileName = `category-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpeg`;
+  if (req.file === undefined) return next();
   await sharp(req.file.buffer)
     .resize(600, 600)
     .toFormat("jpeg")

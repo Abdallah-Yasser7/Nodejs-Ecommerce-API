@@ -17,14 +17,30 @@ const {
   resizeBrandImage,
 } = require("../services/brandServices");
 
+const { protect, allowTo } = require("../services/authServices");
+
 router
   .route("/")
   .get(getAllBrands)
-  .post(uploadBrandImage, resizeBrandImage, createBrandValidator(), createBrand);
+  .post(
+    protect,
+    allowTo("admin", "manager"),
+    uploadBrandImage,
+    resizeBrandImage,
+    createBrandValidator(),
+    createBrand,
+  );
 router
   .route("/:id")
   .get(getBrandValidator(), getBrandById)
-  .put(uploadBrandImage, resizeBrandImage, updateBrandValidator(), updateBrandById)
-  .delete(deleteBrandValidator(), deleteBrandById);
+  .put(
+    protect,
+    allowTo("admin", "manager"),
+    uploadBrandImage,
+    resizeBrandImage,
+    updateBrandValidator(),
+    updateBrandById,
+  )
+  .delete(protect, allowTo("admin"), deleteBrandValidator(), deleteBrandById);
 
 module.exports = router;

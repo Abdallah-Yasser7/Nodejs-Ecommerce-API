@@ -12,17 +12,35 @@ const {
   getSubCategoryById,
   updateSubCategoryById,
   deleteSubCategoryById,
-  checkCategoryId
+  checkCategoryId,
 } = require("../services/subCategryServices");
+
+const { protect, allowTo } = require("../services/authServices");
 
 router
   .route("/")
-  .post(checkCategoryId, createSubCategoryValidator(), createSubCategory)
+  .post(
+    protect,
+    allowTo("admin", "manager"),
+    checkCategoryId,
+    createSubCategoryValidator(),
+    createSubCategory,
+  )
   .get(getAllSubCategories);
 router
   .route("/:id")
   .get(getSubCategoryValidator(), getSubCategoryById)
-  .put(updateCategoryValidator(), updateSubCategoryById)
-  .delete(deleteSubCategoryValidator(), deleteSubCategoryById);
+  .put(
+    protect,
+    allowTo("admin", "manager"),
+    updateCategoryValidator(),
+    updateSubCategoryById,
+  )
+  .delete(
+    protect,
+    allowTo("admin"),
+    deleteSubCategoryValidator(),
+    deleteSubCategoryById,
+  );
 
 module.exports = router;

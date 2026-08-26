@@ -145,3 +145,23 @@ exports.deleteUserValidator = () => {
     validatorMiddleware,
   ];
 }
+
+exports.updateLoggedUserValidator = () => {
+  return [
+    check('name')
+      .optional()
+      .isLength({ min: 3 }).withMessage('Too short user name')
+      .custom((val, { req }) => {
+        req.body.slug = slugify(val);
+        return true;
+      }),
+
+    check('phone')
+      .optional()
+      .isMobilePhone(['ar-EG', 'ar-SA']).withMessage('Invalid phone number, only Egyptian and Saudi numbers accepted'),
+
+    check('profileImg').optional(),
+
+    validatorMiddleware,
+  ];
+}

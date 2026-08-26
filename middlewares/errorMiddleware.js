@@ -19,6 +19,18 @@ const errorMiddlewareInDevelopment = (err, req, res) => {
 };
 
 const errorMiddlewareInProduction = (err, req, res) => {
+  if (err.name === "JsonWebTokenError") {
+    return res.status(401).json({
+      status: err.status,
+      message: "Invalid token. Please log in again",
+    });
+  }
+  if (err.name === "TokenExpiredError") {
+    return res.status(401).json({
+      status: err.status,
+      message: "Your token has expired. Please log in again",
+    });
+  }
   return res.status(err.statusCode).json({
     status: err.status,
     message: err.message,
