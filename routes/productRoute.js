@@ -21,6 +21,7 @@ const {
 const { protect, allowTo } = require("../services/authServices");
 
 router.use("/:categoryId/subcategories", require("./subCategoryRoute"));
+router.use("/:productId/reviews", require("./reviewRoute"));
 
 router
   .route("/")

@@ -69,7 +69,11 @@ const productSchema = new mongoose.Schema(
       ref: "Brand",
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
 
 // Mongoose Query Middleware
@@ -103,6 +107,12 @@ productSchema.post("save", (doc) => {
       return `${process.env.BASE_URL}/products/${image}`;
     });
   }
+});
+
+productSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: "_id",
 });
 
 const Product = mongoose.model("Product", productSchema);

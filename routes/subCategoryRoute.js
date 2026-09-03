@@ -13,6 +13,7 @@ const {
   updateSubCategoryById,
   deleteSubCategoryById,
   checkCategoryId,
+  createFilterObject,
 } = require("../services/subCategryServices");
 
 const { protect, allowTo } = require("../services/authServices");
@@ -26,7 +27,7 @@ router
     createSubCategoryValidator(),
     createSubCategory,
   )
-  .get(getAllSubCategories);
+  .get(createFilterObject, getAllSubCategories);
 router
   .route("/:id")
   .get(getSubCategoryValidator(), getSubCategoryById)

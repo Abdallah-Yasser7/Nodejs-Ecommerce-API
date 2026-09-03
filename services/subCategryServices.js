@@ -10,6 +10,17 @@ exports.checkCategoryId = asyncHandler(async (req, res, next) => {
   }
   next();
 });
+
+// nested route (get all subCategories with categoryId)
+exports.createFilterObject = (req, res, next) => {
+  let filterObject = {};
+  if (req.params.categoryId) {
+    filterObject = { category: req.params.categoryId };
+  }
+  req.filterObject = filterObject;
+  next();
+}
+
 // @desc    Create a subCategory
 // @route   POST /api/v1/subcategories
 // @access  Private

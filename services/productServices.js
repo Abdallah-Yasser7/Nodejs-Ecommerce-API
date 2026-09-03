@@ -53,7 +53,7 @@ exports.getAllProducts = factory.getAll(ProductModel);
 // @desc    Get a product by ID
 // @route   GET /api/v1/products/:id
 // @access  Public
-exports.getProductById = factory.getOne(ProductModel);
+exports.getProductById = factory.getOne(ProductModel, { path: "reviews" });
 
 // @desc    Update a product by ID
 // @route   PUT /api/v1/products/:id
