@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const mountRoutes = require("./routes");
 const dotenv = require("dotenv");
 const ApiError = require("./utils/apiError");
 dotenv.config({ path: "./config.env" });
@@ -20,34 +21,10 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.set('query parser', 'extended');
+app.set("query parser", "extended");
+
 // mount routes
-const categoryRoute = require("./routes/categoryRoute");
-app.use("/api/v1/categories", categoryRoute);
-
-const subCategoryRoute = require("./routes/subCategoryRoute");
-app.use("/api/v1/subcategories", subCategoryRoute);
-
-const brandRoute = require("./routes/brandRoute");
-app.use("/api/v1/brands", brandRoute);
-
-const productRoute = require("./routes/productRoute");
-app.use("/api/v1/products", productRoute);
-
-const userRoute = require("./routes/userRoute");
-app.use("/api/v1/users", userRoute);
-
-const authRoute = require("./routes/authRoute");
-app.use("/api/v1/auth", authRoute);
-
-const reviewRoute = require("./routes/reviewRoute");
-app.use("/api/v1/reviews", reviewRoute);
-
-const wishlistRoute = require("./routes/wishlistRoute");
-app.use("/api/v1/wishlist", wishlistRoute);
-
-const addressesRoute = require("./routes/addressesRoute");
-app.use("/api/v1/addresses", addressesRoute);
+mountRoutes(app);
 
 // this is new in express version 5
 app.all("/*any", (req, res, next) => {
