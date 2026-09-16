@@ -30,6 +30,12 @@ app.use(compression());
 
 app.set("query parser", "extended");
 
+app.get("/healthz", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+  });
+});
+
 // mount routes
 mountRoutes(app);
 
