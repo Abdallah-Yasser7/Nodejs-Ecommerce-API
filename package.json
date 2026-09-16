@@ -8,11 +8,14 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "prod": "cross-env NODE_ENV=production node server.js"
+    "prod": "cross-env NODE_ENV=production node server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "colors": "^1.4.0",
+    "compression": "^1.8.2",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-async-handler": "^1.2.0",
@@ -23,7 +26,8 @@
     "multer": "^2.2.0",
     "nodemailer": "^9.0.5",
     "sharp": "^0.35.3",
-    "slugify": "^1.6.9"
+    "slugify": "^1.6.9",
+    "stripe": "^22.6.2"
   },
   "devDependencies": {
     "cross-env": "^10.1.0",

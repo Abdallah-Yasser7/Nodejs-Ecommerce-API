@@ -57,6 +57,9 @@ exports.getOne = (Model, populateOptions) =>
     if (!document) {
       return next(new ApiError("Document not found", 404));
     }
+    if (req.user.role === "user" && document.user && document.user._id.toString() !== req.user._id.toString()) {
+      return next(new ApiError("You are not authorized to access this document", 403));
+    }
     res
       .status(200)
       .json({ data: document, message: "Document fetched successfully" });

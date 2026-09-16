@@ -1,10 +1,12 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-const mountRoutes = require("./routes");
+const cors = require("cors");
+const compression = require("compression");
 const dotenv = require("dotenv");
-const ApiError = require("./utils/apiError");
 dotenv.config({ path: "./config.env" });
+const mountRoutes = require("./routes");
+const ApiError = require("./utils/apiError");
 const port = process.env.PORT || 3000;
 const morgan = require("morgan");
 const globalErrorMiddleware = require("./middlewares/errorMiddleware");
@@ -20,6 +22,11 @@ app.use(express.static(path.join(__dirname, "uploads")));
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+app.use(cors());
+app.options("*any", cors());
+
+app.use(compression());
 
 app.set("query parser", "extended");
 
