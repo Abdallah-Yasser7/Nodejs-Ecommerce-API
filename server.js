@@ -17,6 +17,7 @@ const dbConnection = require("./config/database");
 dbConnection();
 
 // middleware
+app.post("/webhook-checkout", express.raw({ type: "application/json" }), webhookCheckout);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
 if (process.env.NODE_ENV === "development") {
