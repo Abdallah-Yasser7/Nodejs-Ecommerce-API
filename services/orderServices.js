@@ -1,10 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const OrderModel = require("../models/orderModel");
 const CartModel = require("../models/cartModel");
+const UserModel = require("../models/userModel");
 const ProductModel = require("../models/productModel");
 const ApiError = require("../utils/apiError");
 const factory = require("./handlersFactory");
-const { create } = require("../models/categoryModel");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const createOrderOnline = async (session) => {
