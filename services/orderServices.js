@@ -25,6 +25,9 @@ const createOrderOnline = async (session) => {
     cartItems: cart.cartItems,
     totalOrderPrice: orderPrice / 100, // Convert from cents to dollars
     shippingAddress,
+    isPaid: true,
+    paidAt: Date.now(),
+    paymentMethod: "Card",
   });
   // 4 - After creating order, update product quantity and sold
   if (order) {
