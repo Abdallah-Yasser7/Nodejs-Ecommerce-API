@@ -13,13 +13,17 @@ const createOrderOnline = async (session) => {
   if (!cart) {
     throw new ApiError("Cart not found", 404);
   }
+  const user = await UserModel.findOne({ email: session.customer_email });
+  if (!user) {
+    throw new ApiError("User not found", 404);
+  }
   const shippingAddress = session.metadata;
   const orderPrice = session.amount_total;
   // 3 - Create a order
   const order = await OrderModel.create({
-    user: req.user._id,
+    user: user._id,
     cartItems: cart.cartItems,
-    totalOrderPrice: orderPrice,
+    totalOrderPrice: orderPrice / 100, // Convert from cents to dollars
     shippingAddress,
   });
   // 4 - After creating order, update product quantity and sold
