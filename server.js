@@ -13,6 +13,7 @@ const globalErrorMiddleware = require("./middlewares/errorMiddleware");
 const dns = require("dns");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const dbConnection = require("./config/database");
+const { webhookCheckout } = require("./services/orderServices");
 // Connect to MongoDB
 dbConnection();
 
